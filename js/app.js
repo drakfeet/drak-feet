@@ -80,6 +80,7 @@ function renderCard(container, p) {
     </div>
 
     <div class="payment-method">
+      <small><strong>Escolha a Forma de Pagamento</strong></small>
       <select>
         <option value="PIX">PIX</option>
         <option value="CARTAO">Cartão</option>
