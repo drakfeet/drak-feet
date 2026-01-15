@@ -1,7 +1,5 @@
 /* ======================================================
-   Drak Feet - App Principal
-   Autor: Drak Feet
-   Descrição: Renderização, filtros, WhatsApp e Pixel
+   Drak Feet - App Principal (FINAL)
 ====================================================== */
 
 console.info("🚀 app.js carregado com sucesso");
@@ -12,24 +10,18 @@ AOS.init({
   easing: "ease-out-cubic"
 });
 
-/* =======================
-   ELEMENTOS DOM
-======================= */
 const menuToggle   = document.getElementById("menuToggle");
 const menu         = document.getElementById("menu");
 const brandFilter  = document.getElementById("filterBrand");
 const sizeFilter   = document.getElementById("filterSize");
 const clearBtn     = document.getElementById("clearFilters");
 
-/* =======================
-   MENU MOBILE
-======================= */
-menuToggle.addEventListener("click", () => {
+menuToggle.onclick = () => {
   menu.style.display = menu.style.display === "block" ? "none" : "block";
-});
+};
 
 /* =======================
-   INICIALIZA FILTROS
+   FILTROS
 ======================= */
 function initFilters() {
   const brands = new Set();
@@ -41,135 +33,127 @@ function initFilters() {
   });
 
   brands.forEach(b => {
-    const opt = document.createElement("option");
-    opt.value = b;
-    opt.textContent = b;
-    brandFilter.appendChild(opt);
+    brandFilter.innerHTML += `<option value="${b}">${b}</option>`;
   });
 
   [...sizes].sort((a,b) => a - b).forEach(s => {
-    const opt = document.createElement("option");
-    opt.value = s;
-    opt.textContent = s;
-    sizeFilter.appendChild(opt);
+    sizeFilter.innerHTML += `<option value="${s}">${s}</option>`;
   });
 
-  console.info("✅ Filtros inicializados");
+  console.info("✅ Filtros carregados");
 }
 
 /* =======================
-   RENDERIZAÇÃO GERAL
+   RENDER GERAL
 ======================= */
 function renderAll() {
-
-  const selectedBrand = brandFilter.value;
-  const selectedSize  = sizeFilter.value ? Number(sizeFilter.value) : null;
+  const brand = brandFilter.value;
+  const size  = sizeFilter.value ? Number(sizeFilter.value) : null;
 
   document.querySelectorAll(".category").forEach(section => {
-
     const container = section.querySelector(".products");
-    const categoryKey = container.dataset.category;
-    const categoryProducts = products[categoryKey];
+    const key = container.dataset.category;
+    const list = products[key];
 
-    let filteredProducts = categoryProducts.filter(p => {
-      const brandMatch = !selectedBrand || p.brand === selectedBrand;
-      const sizeMatch  = !selectedSize || p.sizes.includes(selectedSize);
-      return brandMatch && sizeMatch;
-    });
+    const filtered = list.filter(p =>
+      (!brand || p.brand === brand) &&
+      (!size || p.sizes.includes(size))
+    );
 
-    // Regra do filtro de MARCA:
-    if (selectedBrand) {
-      section.style.display =
-        categoryProducts.some(p => p.brand === selectedBrand)
-        ? "block"
-        : "none";
-    } else {
-      section.style.display = filteredProducts.length ? "block" : "none";
-    }
+    section.style.display =
+      brand && !list.some(p => p.brand === brand)
+      ? "none"
+      : filtered.length ? "block" : "none";
 
     container.innerHTML = "";
-
-    filteredProducts.forEach(p => renderCard(container, p));
-  });
-
-  console.info("🔄 Render atualizado", {
-    marca: selectedBrand || "todas",
-    tamanho: selectedSize || "todos"
+    filtered.forEach(p => renderCard(container, p));
   });
 }
 
 /* =======================
-   CARD DO PRODUTO
+   CARD
 ======================= */
-function renderCard(container, product) {
+function renderCard(container, p) {
 
   let selectedSize = null;
+  let selectedPayment = "PIX";
 
   const card = document.createElement("div");
   card.className = "card";
   card.setAttribute("data-aos", "fade-up");
 
   card.innerHTML = `
-    <img src="${product.img}" alt="${product.model}">
-    <h3>${product.brand} - ${product.model}</h3>
+    <img src="${p.img}" alt="${p.model}">
+    <h3>${p.brand} - ${p.model}</h3>
 
-    <span class="old">R$ ${product.old.toFixed(2)}</span>
-    <span class="price">R$ ${product.pix.toFixed(2)} no PIX</span>
-    <small>Até 4x de R$ ${product.card.toFixed(2)}</small>
+    <span class="old">R$ ${p.old.toFixed(2)}</span>
+    <span class="price">R$ ${p.pix.toFixed(2)} no PIX</span>
+    <small>Até 4x de R$ ${p.card.toFixed(2)}</small>
 
     <div class="sizes">
-      ${product.sizes.map(size => `
-        <div class="size">${size}</div>
-      `).join("")}
+      ${p.sizes.map(s => `<div class="size">${s}</div>`).join("")}
+    </div>
+
+    <div class="payment-method">
+      <select>
+        <option value="PIX">PIX</option>
+        <option value="CARTAO">Cartão</option>
+      </select>
     </div>
 
     <button class="btn-buy">Comprar no WhatsApp</button>
   `;
 
-  /* TAMANHOS */
+  /* TAMANHO */
   card.querySelectorAll(".size").forEach(el => {
-    el.addEventListener("click", () => {
+    el.onclick = () => {
       card.querySelectorAll(".size").forEach(s => s.classList.remove("active"));
       el.classList.add("active");
-      selectedSize = el.textContent;
-    });
+      selectedSize = el.innerText;
+    };
   });
 
-  /* BOTÃO WHATSAPP */
-  card.querySelector(".btn-buy").addEventListener("click", () => {
+  /* PAGAMENTO */
+  card.querySelector(".payment-method select").onchange = e => {
+    selectedPayment = e.target.value;
+  };
+
+  /* WHATSAPP */
+  card.querySelector(".btn-buy").onclick = () => {
 
     if (!selectedSize) {
-      alert("⚠️ Selecione um tamanho antes de continuar");
+      alert("Selecione um tamanho antes de continuar");
       return;
     }
 
-    /* META PIXEL */
     if (typeof fbq === "function") {
       fbq("track", "Contact", {
-        content_name: `${product.brand} ${product.model}`,
-        content_category: product.brand,
-        value: product.pix,
+        content_name: `${p.brand} ${p.model}`,
+        content_category: p.brand,
+        value: selectedPayment === "PIX" ? p.pix : p.card,
         currency: "BRL"
       });
-      console.info("📊 Pixel: evento Contact disparado");
     }
 
+    const paymentText =
+      selectedPayment === "PIX"
+        ? `PIX: R$ ${p.pix.toFixed(2)}`
+        : `Cartão: até 4x de R$ ${p.card.toFixed(2)}`;
+
     const message =
-`Olá! 👟 Tenho interesse no produto abaixo:
+`Drak Feet - Pedido via Catalogo
 
-📌 Produto: ${product.brand} ${product.model}
-📏 Tamanho: ${selectedSize}
+Produto: ${p.brand} ${p.model}
+Tamanho: ${selectedSize}
 
-💰 Valor no PIX: R$ ${product.pix.toFixed(2)}
-💳 Cartão: até 4x de R$ ${product.card.toFixed(2)}
-
-📍 Pronta entrega em Leme - SP`;
+Forma de Pagamento:
+${paymentText}`;
 
     window.open(
       `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`,
       "_blank"
     );
-  });
+  };
 
   container.appendChild(card);
 }
@@ -177,15 +161,15 @@ function renderCard(container, product) {
 /* =======================
    EVENTOS
 ======================= */
-brandFilter.addEventListener("change", renderAll);
-sizeFilter.addEventListener("change", renderAll);
+brandFilter.onchange = renderAll;
+sizeFilter.onchange  = renderAll;
 
-clearBtn.addEventListener("click", () => {
+clearBtn.onclick = () => {
   brandFilter.value = "";
   sizeFilter.value  = "";
   renderAll();
   console.info("🧹 Filtros limpos");
-});
+};
 
 /* =======================
    START
