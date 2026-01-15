@@ -1,0 +1,306 @@
+/* ======================================================
+   Drak Feet - Estilo Global (FINAL)
+====================================================== */
+
+:root {
+  --bg-main: #0f1220;
+  --bg-secondary: #12152a;
+  --bg-card: #181c2a;
+  --accent: #6235d0;
+  --brand: #6f32d3;
+  --text-main: #ffffff;
+  --text-muted: #a9aac3;
+  --success: #25D366;
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+  padding-top: 110px; /* aviso fixo + menu */
+}
+
+/* =======================
+   AVISO MOTOBOY (FIXO)
+======================= */
+.delivery-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--bg-secondary);
+  text-align: center;
+  padding: 10px;
+  font-size: 0.95em;
+  z-index: 1200;
+}
+
+.blink {
+  animation: blinkSoft 2s infinite;
+}
+
+@keyframes blinkSoft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* =======================
+   HEADER / MENU (DARK)
+======================= */
+header {
+  position: fixed;
+  top: 42px; /* abaixo do aviso */
+  left: 0;
+  width: 100%;
+  z-index: 1100;
+  background: #0c0f1d;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #1f2240;
+}
+
+header img {
+  height: 42px;
+}
+
+nav a {
+  color: white;
+  margin-left: 18px;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: var(--brand);
+  transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+#menuToggle {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: white;
+}
+
+/* =======================
+   AVISO LOJA
+======================= */
+.store-warning {
+  background: #0c0f1d;
+  text-align: center;
+  padding: 26px 18px;
+  border-bottom: 1px solid #1f2240;
+}
+
+.store-warning p {
+  color: #d7d8ff;
+  margin-bottom: 16px;
+  font-size: 0.95em;
+}
+
+.btn-online {
+  display: inline-block;
+  padding: 12px 26px;
+  background: linear-gradient(90deg, var(--accent), var(--brand));
+  border-radius: 30px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  animation: pulse 2.5s infinite;
+}
+
+/* =======================
+   FILTROS
+======================= */
+.filters {
+  background: var(--bg-secondary);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.filters select {
+  background: var(--bg-card);
+  border: 1px solid #2a2f55;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  min-width: 180px;
+}
+
+.btn-clear {
+  background: transparent;
+  border: 1px solid var(--brand);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* =======================
+   CATEGORIAS
+======================= */
+.category {
+  padding: 50px 28px;
+}
+
+.category h2 {
+  margin-bottom: 28px;
+  padding-left: 12px;
+  border-left: 6px solid var(--brand);
+}
+
+/* =======================
+   GRID
+======================= */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+/* =======================
+   CARD
+======================= */
+.card {
+  background: var(--bg-card);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 40px rgba(0,0,0,.55);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+
+.old {
+  color: var(--text-muted);
+  font-size: 0.85em;
+  text-decoration: line-through;
+}
+
+.price {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.card small {
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+/* TAMANHOS */
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.size {
+  padding: 6px 10px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.size.active {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+/* =======================
+   BOTÃO WHATSAPP
+======================= */
+.btn-buy {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: var(--success);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  animation: pulse 2.5s infinite;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.btn-buy:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 22px rgba(37,211,102,.8);
+}
+
+/* =======================
+   ANIMAÇÕES
+======================= */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(111,50,211,.5); }
+  70% { box-shadow: 0 0 0 16px rgba(111,50,211,0); }
+  100% { box-shadow: 0 0 0 0 rgba(111,50,211,0); }
+}
+
+/* =======================
+   MOBILE
+======================= */
+@media (max-width: 768px) {
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 65px;
+    right: 20px;
+    background: var(--bg-card);
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  nav a {
+    display: block;
+    margin: 12px 0;
+  }
+
+  #menuToggle {
+    display: block;
+  }
+
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category {
+    padding: 35px 18px;
+  }
+}

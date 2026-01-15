@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Drak Feet | Catálogo Oficial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FONTE -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- META PIXEL -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1521537425624147');
+  fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1521537425624147&ev=PageView&noscript=1"/>
+  </noscript>
+</head>
+
+<body>
+
+<!-- AVISO MOTOBOY FIXO -->
+<div class="delivery-warning blink fixed-top">
+  🚚 Taxa de entrega Motoboy: <strong>R$ 8,00</strong>
+</div>
+
+<header id="inicio">
+  <div class="logo">
+    <img src="https://i.imgur.com/LnW039f.png" alt="Drak Feet Logo">
+  </div>
+
+  <nav id="menu">
+    <a href="#inicio">Início</a>
+    <a href="#nike">Nike</a>
+    <a href="#newbalance">New Balance</a>
+    <a href="#puma">Puma</a>
+    <a href="#mizuno">Mizuno</a>
+  </nav>
+
+  <div id="menuToggle">☰</div>
+</header>
+
+<!-- AVISO LOJA -->
+<div class="store-warning">
+  <p>
+    Todos os produtos exibidos aqui são de <strong>pronta entrega</strong> na loja física em <strong>Leme-SP</strong>.<br>
+    Produtos sob encomenda você encontra em nossa loja online.
+  </p>
+  <a href="https://www.drakfeet.com" target="_blank" class="btn-online">
+    Acessar Loja Online
+  </a>
+</div>
+
+<!-- FILTROS -->
+<section class="filters">
+  <select id="filterBrand">
+    <option value="">Todas as marcas</option>
+  </select>
+
+  <select id="filterSize">
+    <option value="">Todos os tamanhos</option>
+  </select>
+
+  <button id="clearFilters" class="btn-clear">
+    Limpar filtros
+  </button>
+</section>
+
+<main>
+  <section id="nike" class="category">
+    <h2>Nike</h2>
+    <div class="products" data-category="nike"></div>
+  </section>
+
+  <section id="newbalance" class="category">
+    <h2>New Balance</h2>
+    <div class="products" data-category="newbalance"></div>
+  </section>
+
+  <section id="puma" class="category">
+    <h2>Puma</h2>
+    <div class="products" data-category="puma"></div>
+  </section>
+
+  <section id="mizuno" class="category">
+    <h2>Mizuno</h2>
+    <div class="products" data-category="mizuno"></div>
+  </section>
+</main>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
