@@ -304,3 +304,40 @@ nav a:hover::after {
     padding: 35px 18px;
   }
 }
+
+/* =======================
+   FORMA DE PAGAMENTO
+======================= */
+.payment-method {
+  margin-bottom: 14px;
+}
+
+.payment-method select {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid #2a2f55;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+/* =======================
+   FILTROS - FIX MOBILE
+======================= */
+.filters {
+  align-items: center;
+}
+
+.filters select,
+.btn-clear {
+  flex: 1 1 180px;
+  max-width: 220px;
+}
+
+/* MOBILE EXTRA PEQUENO */
+@media (max-width: 420px) {
+  .filters select,
+  .btn-clear {
+    max-width: 100%;
+  }
+}
