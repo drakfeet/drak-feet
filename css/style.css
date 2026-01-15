@@ -26,7 +26,7 @@ body {
   font-family: 'Poppins', sans-serif;
   background: var(--bg-main);
   color: var(--text-main);
-  padding-top: 110px; /* aviso fixo + menu */
+  padding-top: 110px;
 }
 
 /* =======================
@@ -54,25 +54,23 @@ body {
 }
 
 /* =======================
-   HEADER / MENU (DARK)
+   HEADER
 ======================= */
 header {
   position: fixed;
-  top: 42px; /* abaixo do aviso */
+  top: 42px;
   left: 0;
   width: 100%;
   z-index: 1100;
   background: #0c0f1d;
   padding: 14px 24px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #1f2240;
 }
 
-header img {
-  height: 42px;
-}
+header img { height: 42px; }
 
 nav a {
   color: white;
@@ -85,17 +83,15 @@ nav a {
 nav a::after {
   content: "";
   position: absolute;
-  left: 0;
   bottom: -4px;
+  left: 0;
   width: 0%;
   height: 2px;
   background: var(--brand);
-  transition: width 0.3s ease;
+  transition: width .3s ease;
 }
 
-nav a:hover::after {
-  width: 100%;
-}
+nav a:hover::after { width: 100%; }
 
 #menuToggle {
   display: none;
@@ -117,11 +113,10 @@ nav a:hover::after {
 .store-warning p {
   color: #d7d8ff;
   margin-bottom: 16px;
-  font-size: 0.95em;
+  font-size: .95em;
 }
 
 .btn-online {
-  display: inline-block;
   padding: 12px 26px;
   background: linear-gradient(90deg, var(--accent), var(--brand));
   border-radius: 30px;
@@ -143,22 +138,25 @@ nav a:hover::after {
   flex-wrap: wrap;
 }
 
-.filters select {
+.filters select,
+.btn-clear {
   background: var(--bg-card);
   border: 1px solid #2a2f55;
   color: white;
-  padding: 10px 14px;
+  padding: 12px 14px;
   border-radius: 8px;
   min-width: 180px;
 }
 
+/* garante espaçamento no mobile */
+.filters > * {
+  margin-bottom: 6px;
+}
+
 .btn-clear {
-  background: transparent;
-  border: 1px solid var(--brand);
-  color: white;
-  padding: 10px 16px;
-  border-radius: 8px;
   cursor: pointer;
+  background: transparent;
+  border-color: var(--brand);
 }
 
 /* =======================
@@ -208,7 +206,7 @@ nav a:hover::after {
 
 .old {
   color: var(--text-muted);
-  font-size: 0.85em;
+  font-size: .85em;
   text-decoration: line-through;
 }
 
@@ -240,6 +238,22 @@ nav a:hover::after {
 .size.active {
   background: var(--brand);
   border-color: var(--brand);
+}
+
+/* =======================
+   PAGAMENTO
+======================= */
+.payment-method {
+  margin-bottom: 14px;
+}
+
+.payment-method select {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid #2a2f55;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
 }
 
 /* =======================
@@ -302,42 +316,5 @@ nav a:hover::after {
 
   .category {
     padding: 35px 18px;
-  }
-}
-
-/* =======================
-   FORMA DE PAGAMENTO
-======================= */
-.payment-method {
-  margin-bottom: 14px;
-}
-
-.payment-method select {
-  width: 100%;
-  background: var(--bg-card);
-  border: 1px solid #2a2f55;
-  color: white;
-  padding: 10px 14px;
-  border-radius: 8px;
-}
-
-/* =======================
-   FILTROS - FIX MOBILE
-======================= */
-.filters {
-  align-items: center;
-}
-
-.filters select,
-.btn-clear {
-  flex: 1 1 180px;
-  max-width: 220px;
-}
-
-/* MOBILE EXTRA PEQUENO */
-@media (max-width: 420px) {
-  .filters select,
-  .btn-clear {
-    max-width: 100%;
   }
 }
