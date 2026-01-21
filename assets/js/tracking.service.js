@@ -1,12 +1,12 @@
 /**
  * Serviço de Tracking
- * Gerencia Pixel Facebook e Google Tag Manager
+ * Gerencia Facebook Pixel e Google Analytics 4
  */
 
 const TrackingService = {
   config: null,
   facebookInitialized: false,
-  gtmInitialized: false,
+  gaInitialized: false,
 
   /**
    * Inicializa tracking com base nas configurações
@@ -20,9 +20,9 @@ const TrackingService = {
       this.initFacebookPixel(config.pixelFacebook.trim());
     }
 
-    // Inicializar Google Tag Manager
-    if (config.gtmGoogle && config.gtmGoogle.trim() !== '') {
-      this.initGTM(config.gtmGoogle.trim());
+    // Inicializar Google Analytics
+    if (config.gaMeasurementId && config.gaMeasurementId.trim() !== '') {
+      this.initGA(config.gaMeasurementId.trim());
     }
   },
 
@@ -32,7 +32,6 @@ const TrackingService = {
    */
   initFacebookPixel(pixelId) {
     try {
-      // Criar função fbq
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -53,22 +52,29 @@ const TrackingService = {
   },
 
   /**
-   * Inicializa Google Tag Manager
-   * @param {string} gtmId 
+   * Inicializa Google Analytics 4
+   * @param {string} measurementId 
    */
-  initGTM(gtmId) {
+  initGA(measurementId) {
     try {
-      // GTM script
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer', gtmId);
+      // Criar dataLayer e gtag
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
 
-      this.gtmInitialized = true;
-      console.info('✅ Google Tag Manager inicializado:', gtmId);
+      gtag('js', new Date());
+      gtag('config', measurementId);
+
+      // Carregar script GA
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+      document.head.appendChild(script);
+
+      this.gaInitialized = true;
+      console.info('✅ Google Analytics inicializado:', measurementId);
     } catch (error) {
-      console.warn('⚠️ Erro ao inicializar GTM:', error);
+      console.warn('⚠️ Erro ao inicializar Google Analytics:', error);
     }
   },
 
@@ -93,27 +99,23 @@ const TrackingService = {
   },
 
   /**
-   * Envia evento para Google Tag Manager
+   * Envia evento para Google Analytics
    * @param {string} eventName 
    * @param {object} dados 
    */
-  trackGTMEvent(eventName, dados) {
-    if (!this.gtmInitialized || typeof dataLayer === 'undefined') return;
+  trackGAEvent(eventName, dados) {
+    if (!this.gaInitialized || typeof gtag === 'undefined') return;
 
     try {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: eventName,
-        ...dados
-      });
-      console.info('✅ Evento enviado ao GTM:', eventName);
+      gtag('event', eventName, dados);
+      console.info('✅ Evento enviado ao Google Analytics:', eventName);
     } catch (error) {
-      console.warn('⚠️ Erro ao enviar evento para GTM:', error);
+      console.warn('⚠️ Erro ao enviar evento para Google Analytics:', error);
     }
   },
 
   /**
-   * Rastreia clique no WhatsApp (ambos os serviços)
+   * Rastreia clique no WhatsApp (Facebook + GA)
    * @param {object} dados 
    */
   trackWhatsAppClick(dados) {
@@ -124,8 +126,8 @@ const TrackingService = {
       valor: dados.valor
     });
 
-    // Google Tag Manager
-    this.trackGTMEvent('whatsapp_contact', {
+    // Google Analytics
+    this.trackGAEvent('whatsapp_contact', {
       product_name: dados.nome,
       product_brand: dados.marca,
       product_size: dados.tamanho,
