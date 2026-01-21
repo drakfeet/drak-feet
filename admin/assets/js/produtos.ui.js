@@ -31,8 +31,8 @@ const ProdutosUI = {
         </td>
         <td>${produto.nome}</td>
         <td>${produto.marca}</td>
-        <td>R$ ${this.formatarPreco(produto.precoPix)}</td>
-        <td>R$ ${this.formatarPreco(produto.precoCartao)}</td>
+        <td>R$ ${ProdutosUI.formatarPreco(produto.precoPix)}</td>
+        <td>R$ ${ProdutosUI.formatarPreco(produto.precoCartao)}</td>
         <td>
           <span class="status-badge ${produto.ativo ? 'ativo' : 'inativo'}">
             ${produto.ativo ? 'Ativo' : 'Inativo'}
@@ -78,15 +78,15 @@ const ProdutosUI = {
       return;
     }
 
-    this.mostrarLoading('Excluindo produto...');
+    ProdutosUI.mostrarLoading('Excluindo produto...');
     const result = await ProdutosService.deletar(id);
-    this.esconderLoading();
+    ProdutosUI.esconderLoading();
 
     if (result.success) {
-      this.mostrarMensagem('Produto excluído com sucesso!', 'success');
+      ProdutosUI.mostrarMensagem('Produto excluído com sucesso!', 'success');
       setTimeout(() => window.location.reload(), 1000);
     } else {
-      this.mostrarMensagem('Erro ao excluir produto', 'error');
+      ProdutosUI.mostrarMensagem('Erro ao excluir produto', 'error');
     }
   },
 
@@ -95,12 +95,12 @@ const ProdutosUI = {
    * @param {string} id 
    */
   async carregarFormulario(id) {
-    this.mostrarLoading('Carregando produto...');
+    ProdutosUI.mostrarLoading('Carregando produto...');
     const produto = await ProdutosService.buscarPorId(id);
-    this.esconderLoading();
+    ProdutosUI.esconderLoading();
 
     if (!produto) {
-      this.mostrarMensagem('Produto não encontrado', 'error');
+      ProdutosUI.mostrarMensagem('Produto não encontrado', 'error');
       return;
     }
 
@@ -119,7 +119,7 @@ const ProdutosUI = {
 
     // Preview da imagem
     if (produto.imagemUrl) {
-      this.mostrarPreviewImagem(produto.imagemUrl);
+      ProdutosUI.mostrarPreviewImagem(produto.imagemUrl);
       document.getElementById('imagemUrlHidden').value = produto.imagemUrl;
     }
   },
@@ -134,7 +134,6 @@ const ProdutosUI = {
     const form = e.target;
     const produtoId = new URLSearchParams(window.location.search).get('id');
 
-    // Coletar dados
     const tamanhosSelecionados = Array.from(
       form.querySelectorAll('input[name="tamanhos"]:checked')
     ).map(cb => cb.value);
@@ -150,27 +149,27 @@ const ProdutosUI = {
       ativo: form.ativo.checked
     };
 
-    // Validar
     const validacao = ProdutosService.validar(produto);
     if (!validacao.valido) {
-      this.mostrarMensagem(validacao.erros.join('<br>'), 'error');
+      ProdutosUI.mostrarMensagem(validacao.erros.join('<br>'), 'error');
       return;
     }
 
-    // Salvar
-    this.mostrarLoading(produtoId ? 'Atualizando...' : 'Salvando...');
-    
-    const result = produtoId 
+    ProdutosUI.mostrarLoading(produtoId ? 'Atualizando...' : 'Salvando...');
+
+    const result = produtoId
       ? await ProdutosService.atualizar(produtoId, produto)
       : await ProdutosService.criar(produto);
 
-    this.esconderLoading();
+    ProdutosUI.esconderLoading();
 
     if (result.success) {
-      this.mostrarMensagem('Produto salvo com sucesso!', 'success');
-      setTimeout(() => window.location.href = '/admin/produtos.html', 1500);
+      ProdutosUI.mostrarMensagem('Produto salvo com sucesso!', 'success');
+      setTimeout(() => {
+        window.location.href = '/admin/produtos.html';
+      }, 1500);
     } else {
-      this.mostrarMensagem('Erro ao salvar produto', 'error');
+      ProdutosUI.mostrarMensagem('Erro ao salvar produto', 'error');
     }
   },
 
@@ -182,29 +181,27 @@ const ProdutosUI = {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validar tipo
     if (!file.type.startsWith('image/')) {
-      this.mostrarMensagem('Selecione apenas imagens', 'error');
+      ProdutosUI.mostrarMensagem('Selecione apenas imagens', 'error');
       return;
     }
 
-    // Validar tamanho (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      this.mostrarMensagem('Imagem muito grande. Máximo 5MB', 'error');
+      ProdutosUI.mostrarMensagem('Imagem muito grande. Máximo 5MB', 'error');
       return;
     }
 
     try {
-      this.mostrarLoading('Enviando imagem...');
+      ProdutosUI.mostrarLoading('Enviando imagem...');
       const url = await ProdutosService.uploadImagem(file);
-      this.esconderLoading();
+      ProdutosUI.esconderLoading();
 
       document.getElementById('imagemUrlHidden').value = url;
-      this.mostrarPreviewImagem(url);
-      this.mostrarMensagem('Imagem enviada com sucesso!', 'success');
+      ProdutosUI.mostrarPreviewImagem(url);
+      ProdutosUI.mostrarMensagem('Imagem enviada com sucesso!', 'success');
     } catch (error) {
-      this.esconderLoading();
-      this.mostrarMensagem('Erro ao enviar imagem', 'error');
+      ProdutosUI.esconderLoading();
+      ProdutosUI.mostrarMensagem('Erro ao enviar imagem', 'error');
     }
   },
 
@@ -255,7 +252,7 @@ const ProdutosUI = {
     const alert = document.createElement('div');
     alert.className = `alert alert-${tipo}`;
     alert.innerHTML = mensagem;
-    
+
     const container = document.querySelector('.container') || document.body;
     container.insertBefore(alert, container.firstChild);
 
@@ -263,5 +260,5 @@ const ProdutosUI = {
   }
 };
 
-// Exportar
+// Exportar globalmente
 window.ProdutosUI = ProdutosUI;
