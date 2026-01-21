@@ -6,7 +6,7 @@
 const ProdutosUI = {
   /**
    * Renderiza lista de produtos na tabela
-   * @param {Array} produtos 
+   * @param {Array} produtos
    */
   renderizarLista(produtos) {
     const tbody = document.getElementById('produtosTableBody');
@@ -26,7 +26,7 @@ const ProdutosUI = {
     tbody.innerHTML = produtos.map(produto => `
       <tr>
         <td>
-          <img src="${produto.imagemUrl}" alt="${produto.nome}" 
+          <img src="${produto.imagemUrl}" alt="${produto.nome}"
                style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
         </td>
         <td>${produto.nome}</td>
@@ -42,7 +42,7 @@ const ProdutosUI = {
           <button onclick="ProdutosUI.editar('${produto.id}')" class="btn-editar" title="Editar">
             ✏️
           </button>
-          <button onclick="ProdutosUI.confirmarDelete('${produto.id}', '${produto.nome}')" 
+          <button onclick="ProdutosUI.confirmarDelete('${produto.id}', '${produto.nome}')"
                   class="btn-deletar" title="Excluir">
             🗑️
           </button>
@@ -51,32 +51,16 @@ const ProdutosUI = {
     `).join('');
   },
 
-  /**
-   * Formata preço para exibição
-   * @param {number} preco 
-   * @returns {string}
-   */
   formatarPreco(preco) {
     return parseFloat(preco).toFixed(2).replace('.', ',');
   },
 
-  /**
-   * Redireciona para edição
-   * @param {string} id 
-   */
   editar(id) {
     window.location.href = `/admin/produto-form.html?id=${id}`;
   },
 
-  /**
-   * Confirma exclusão
-   * @param {string} id 
-   * @param {string} nome 
-   */
   async confirmarDelete(id, nome) {
-    if (!confirm(`Deseja realmente excluir "${nome}"?`)) {
-      return;
-    }
+    if (!confirm(`Deseja realmente excluir "${nome}"?`)) return;
 
     ProdutosUI.mostrarLoading('Excluindo produto...');
     const result = await ProdutosService.deletar(id);
@@ -90,10 +74,6 @@ const ProdutosUI = {
     }
   },
 
-  /**
-   * Carrega dados no formulário (modo edição)
-   * @param {string} id 
-   */
   async carregarFormulario(id) {
     ProdutosUI.mostrarLoading('Carregando produto...');
     const produto = await ProdutosService.buscarPorId(id);
@@ -111,72 +91,62 @@ const ProdutosUI = {
     document.getElementById('precoCartao').value = produto.precoCartao;
     document.getElementById('ativo').checked = produto.ativo;
 
-    // Marcar tamanhos
     produto.tamanhos.forEach(tamanho => {
       const checkbox = document.querySelector(`input[name="tamanhos"][value="${tamanho}"]`);
       if (checkbox) checkbox.checked = true;
     });
 
-    // Preview da imagem
     if (produto.imagemUrl) {
       ProdutosUI.mostrarPreviewImagem(produto.imagemUrl);
       document.getElementById('imagemUrlHidden').value = produto.imagemUrl;
     }
   },
 
-  /**
-   * Salva produto (criar ou atualizar)
-   * @param {Event} e 
-   */
   async salvarProduto(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  const form = e.target;
-  const produtoId = new URLSearchParams(window.location.search).get('id');
+    const form = e.target;
+    const produtoId = new URLSearchParams(window.location.search).get('id');
 
-  const tamanhosSelecionados = Array.from(
-    form.querySelectorAll('input[name="tamanhos"]:checked')
-  ).map(cb => cb.value);
+    const tamanhosSelecionados = Array.from(
+      form.querySelectorAll('input[name="tamanhos"]:checked')
+    ).map(cb => cb.value);
 
-  const produto = {
-    nome: form.nome.value.trim(),
-    marca: form.marca.value.trim(),
-    categoria: form.categoria.value.trim(),
-    precoPix: parseFloat(form.precoPix.value),
-    precoCartao: parseFloat(form.precoCartao.value),
-    tamanhos: tamanhosSelecionados,
-    imagemUrl: form.imagemUrlHidden.value,
-    ativo: form.ativo.checked
-  };
+    const produto = {
+      nome: form.nome.value.trim(),
+      marca: form.marca.value.trim(),
+      categoria: form.categoria.value.trim(),
+      precoPix: parseFloat(form.precoPix.value),
+      precoCartao: parseFloat(form.precoCartao.value),
+      tamanhos: tamanhosSelecionados,
+      imagemUrl: form.imagemUrlHidden.value,
+      ativo: form.ativo.checked
+    };
 
-  const validacao = ProdutosService.validar(produto);
-  if (!validacao.valido) {
-    ProdutosUI.mostrarMensagem(validacao.erros.join('<br>'), 'error');
-    return;
-  }
+    const validacao = ProdutosService.validar(produto);
+    if (!validacao.valido) {
+      ProdutosUI.mostrarMensagem(validacao.erros.join('<br>'), 'error');
+      return;
+    }
 
-  ProdutosUI.mostrarLoading(produtoId ? 'Atualizando...' : 'Salvando...');
+    ProdutosUI.mostrarLoading(produtoId ? 'Atualizando...' : 'Salvando...');
 
-  const result = produtoId
-    ? await ProdutosService.atualizar(produtoId, produto)
-    : await ProdutosService.criar(produto);
+    const result = produtoId
+      ? await ProdutosService.atualizar(produtoId, produto)
+      : await ProdutosService.criar(produto);
 
-  ProdutosUI.esconderLoading();
+    ProdutosUI.esconderLoading();
 
-  if (result.success) {
-    ProdutosUI.mostrarMensagem('Produto salvo com sucesso!', 'success');
-    setTimeout(() => {
-      window.location.href = '/admin/produtos.html';
-    }, 1500);
-  } else {
-    ProdutosUI.mostrarMensagem('Erro ao salvar produto', 'error');
-  }
-}
+    if (result.success) {
+      ProdutosUI.mostrarMensagem('Produto salvo com sucesso!', 'success');
+      setTimeout(() => {
+        window.location.href = '/admin/produtos.html';
+      }, 1500);
+    } else {
+      ProdutosUI.mostrarMensagem('Erro ao salvar produto', 'error');
+    }
+  }, // ✅ VÍRGULA CORRETA AQUI
 
-  /**
-   * Processa upload de imagem
-   * @param {Event} e 
-   */
   async processarUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -205,10 +175,6 @@ const ProdutosUI = {
     }
   },
 
-  /**
-   * Mostra preview da imagem
-   * @param {string} url 
-   */
   mostrarPreviewImagem(url) {
     const preview = document.getElementById('imagemPreview');
     if (preview) {
@@ -217,10 +183,6 @@ const ProdutosUI = {
     }
   },
 
-  /**
-   * Mostra loading
-   * @param {string} mensagem 
-   */
   mostrarLoading(mensagem) {
     let loading = document.getElementById('loadingOverlay');
     if (!loading) {
@@ -233,21 +195,11 @@ const ProdutosUI = {
     loading.style.display = 'flex';
   },
 
-  /**
-   * Esconde loading
-   */
   esconderLoading() {
     const loading = document.getElementById('loadingOverlay');
-    if (loading) {
-      loading.style.display = 'none';
-    }
+    if (loading) loading.style.display = 'none';
   },
 
-  /**
-   * Mostra mensagem de feedback
-   * @param {string} mensagem 
-   * @param {string} tipo 
-   */
   mostrarMensagem(mensagem, tipo = 'info') {
     const alert = document.createElement('div');
     alert.className = `alert alert-${tipo}`;
@@ -262,4 +214,3 @@ const ProdutosUI = {
 
 // Exportar globalmente
 window.ProdutosUI = ProdutosUI;
-
