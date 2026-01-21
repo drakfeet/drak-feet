@@ -129,49 +129,49 @@ const ProdutosUI = {
    * @param {Event} e 
    */
   async salvarProduto(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const form = e.target;
-    const produtoId = new URLSearchParams(window.location.search).get('id');
+  const form = e.target;
+  const produtoId = new URLSearchParams(window.location.search).get('id');
 
-    const tamanhosSelecionados = Array.from(
-      form.querySelectorAll('input[name="tamanhos"]:checked')
-    ).map(cb => cb.value);
+  const tamanhosSelecionados = Array.from(
+    form.querySelectorAll('input[name="tamanhos"]:checked')
+  ).map(cb => cb.value);
 
-    const produto = {
-      nome: form.nome.value.trim(),
-      marca: form.marca.value.trim(),
-      categoria: form.categoria.value.trim(),
-      precoPix: parseFloat(form.precoPix.value),
-      precoCartao: parseFloat(form.precoCartao.value),
-      tamanhos: tamanhosSelecionados,
-      imagemUrl: form.imagemUrlHidden.value,
-      ativo: form.ativo.checked
-    };
+  const produto = {
+    nome: form.nome.value.trim(),
+    marca: form.marca.value.trim(),
+    categoria: form.categoria.value.trim(),
+    precoPix: parseFloat(form.precoPix.value),
+    precoCartao: parseFloat(form.precoCartao.value),
+    tamanhos: tamanhosSelecionados,
+    imagemUrl: form.imagemUrlHidden.value,
+    ativo: form.ativo.checked
+  };
 
-    const validacao = ProdutosService.validar(produto);
-    if (!validacao.valido) {
-      ProdutosUI.mostrarMensagem(validacao.erros.join('<br>'), 'error');
-      return;
-    }
+  const validacao = ProdutosService.validar(produto);
+  if (!validacao.valido) {
+    ProdutosUI.mostrarMensagem(validacao.erros.join('<br>'), 'error');
+    return;
+  }
 
-    ProdutosUI.mostrarLoading(produtoId ? 'Atualizando...' : 'Salvando...');
+  ProdutosUI.mostrarLoading(produtoId ? 'Atualizando...' : 'Salvando...');
 
-    const result = produtoId
-      ? await ProdutosService.atualizar(produtoId, produto)
-      : await ProdutosService.criar(produto);
+  const result = produtoId
+    ? await ProdutosService.atualizar(produtoId, produto)
+    : await ProdutosService.criar(produto);
 
-    ProdutosUI.esconderLoading();
+  ProdutosUI.esconderLoading();
 
-    if (result.success) {
-      ProdutosUI.mostrarMensagem('Produto salvo com sucesso!', 'success');
-      setTimeout(() => {
-        window.location.href = '/admin/produtos.html';
-      }, 1500);
-    } else {
-      ProdutosUI.mostrarMensagem('Erro ao salvar produto', 'error');
-    }
-  },
+  if (result.success) {
+    ProdutosUI.mostrarMensagem('Produto salvo com sucesso!', 'success');
+    setTimeout(() => {
+      window.location.href = '/admin/produtos.html';
+    }, 1500);
+  } else {
+    ProdutosUI.mostrarMensagem('Erro ao salvar produto', 'error');
+  }
+}
 
   /**
    * Processa upload de imagem
@@ -262,3 +262,4 @@ const ProdutosUI = {
 
 // Exportar globalmente
 window.ProdutosUI = ProdutosUI;
+
