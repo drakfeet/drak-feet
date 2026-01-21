@@ -2,111 +2,178 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Drak Feet | Catálogo Oficial</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- FONTE -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-  <!-- AOS -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/style.css">
-
-  <!-- META PIXEL -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1521537425624147');
-  fbq('track', 'PageView');
-  </script>
-  <noscript>
-    <img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1521537425624147&ev=PageView&noscript=1"/>
-  </noscript>
+  <meta name="description" content="Catálogo de produtos online">
+  <title>Catálogo de Produtos</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <h1 class="logo" id="nomeLoja">Carregando...</h1>
+      <nav class="header-nav">
+        <a href="#produtos" class="nav-link">Produtos</a>
+        <a href="#filtros" class="nav-link mobile-only">Filtros</a>
+      </nav>
+    </div>
+  </header>
 
-<!-- AVISO MOTOBOY FIXO -->
-<div class="delivery-warning blink fixed-top">
-  🚚 Taxa de entrega Motoboy: <strong>R$ 8,00</strong>
-</div>
-
-<header id="inicio">
-  <div class="logo">
-    <img src="https://i.imgur.com/LnW039f.png" alt="Drak Feet Logo">
+  <!-- Aviso de Taxa de Entrega -->
+  <div class="aviso-entrega" id="avisoEntrega" style="display: none;">
+    <div class="container">
+      <span class="aviso-icon">🏍️</span>
+      <span class="aviso-texto">Taxa de Entrega Via Motoboy: <strong id="valorTaxa">R$ 8,00</strong></span>
+    </div>
   </div>
 
-  <nav id="menu">
-    <a href="#inicio">Início</a>
-    <a href="#nike">Nike</a>
-    <a href="#newbalance">New Balance</a>
-    <a href="#puma">Puma</a>
-    <a href="#mizuno">Mizuno</a>
-  </nav>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <div class="catalog-layout">
+        <!-- Sidebar de Filtros -->
+        <aside class="filtros-sidebar" id="filtros">
+          <div class="filtros-header">
+            <h2>Filtros</h2>
+            <button id="btnLimparFiltros" class="btn-limpar">Limpar</button>
+          </div>
 
-  <div id="menuToggle">☰</div>
-</header>
+          <!-- Busca Simples -->
+          <div class="filtro-grupo">
+            <h3>Buscar</h3>
+            <input type="text" id="campoBusca" class="campo-busca" placeholder="Digite para buscar...">
+          </div>
 
-<!-- AVISO LOJA -->
-<div class="store-warning">
-  <p>
-    Todos os produtos exibidos aqui são de <strong>pronta entrega</strong> na loja física em <strong>Leme-SP</strong>.<br>
-    Produtos sob encomenda você encontra em nossa loja online.
-  </p>
-  <a href="https://www.drakfeet.com" target="_blank" class="btn-online">
-    Acessar Loja Online
-  </a>
-</div>
+          <!-- Filtros de Categoria -->
+          <div class="filtro-grupo" id="grupoCategoria" style="display: none;">
+            <h3>Categoria</h3>
+            <div id="filtrosCategoria" class="filtro-opcoes">
+              <!-- Gerado dinamicamente -->
+            </div>
+          </div>
 
-<!-- FILTROS -->
-<section class="filters">
-  <select id="filterBrand">
-    <option value="">Todas as marcas</option>
-  </select>
+          <!-- Filtros de Marca -->
+          <div class="filtro-grupo">
+            <h3>Marca</h3>
+            <div id="filtrosMarca" class="filtro-opcoes">
+              <!-- Gerado dinamicamente -->
+            </div>
+          </div>
 
-  <select id="filterSize">
-    <option value="">Todos os tamanhos</option>
-  </select>
+          <!-- Filtros de Tamanho -->
+          <div class="filtro-grupo">
+            <h3>Tamanho</h3>
+            <div id="filtrosTamanho" class="filtro-opcoes">
+              <!-- Gerado dinamicamente -->
+            </div>
+          </div>
+        </aside>
 
-  <button id="clearFilters" class="btn-clear">
-    Limpar filtros
-  </button>
-</section>
+        <!-- Grid de Produtos -->
+        <section class="produtos-section" id="produtos">
+          <div class="produtos-header">
+            <h2>Produtos</h2>
+            <p id="contadorProdutos" class="contador">0 produtos</p>
+          </div>
 
-<main>
-  <section id="nike" class="category">
-    <h2>Nike</h2>
-    <div class="products" data-category="nike"></div>
-  </section>
+          <div id="produtosGrid" class="produtos-grid">
+            <!-- Produtos gerados dinamicamente -->
+            <div class="loading-state">
+              <div class="loading-spinner"></div>
+              <p>Carregando produtos...</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
 
-  <section id="newbalance" class="category">
-    <h2>New Balance</h2>
-    <div class="products" data-category="newbalance"></div>
-  </section>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Catálogo de Produtos. Todos os direitos reservados.</p>
+    </div>
+  </footer>
 
-  <section id="puma" class="category">
-    <h2>Puma</h2>
-    <div class="products" data-category="puma"></div>
-  </section>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Configuração Firebase -->
+  <script>
+    // IMPORTANTE: Substitua pelas suas credenciais do Firebase
+    const firebaseConfig = {
+       apiKey: "AIzaSyAZ90xAptvBeRDFl52FI7-WJJD14I6YKk4",
+  authDomain: "drak-feet-admin.firebaseapp.com",
+  projectId: "drak-feet-admin",
+  storageBucket: "drak-feet-admin.firebasestorage.app",
+  messagingSenderId: "525123704162",
+  appId: "1:525123704162:web:ea0a3bc86663334a79c83b",
+  measurementId: "G-EFERT7RZZ5"
+    };
 
-  <section id="mizuno" class="category">
-    <h2>Mizuno</h2>
-    <div class="products" data-category="mizuno"></div>
-  </section>
-</main>
+    firebase.initializeApp(firebaseConfig);
+    console.info('✅ Firebase inicializado');
+  </script>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
+  <!-- Scripts -->
+  <script src="assets/js/data.service.js"></script>
+  <script src="assets/js/tracking.service.js"></script>
+  <script src="assets/js/catalog.render.js"></script>
+  <script src="assets/js/filters.js"></script>
 
+  <!-- Inicialização -->
+  <script>
+    async function inicializarCatalogo() {
+      try {
+        // Inicializar serviço
+        DataService.init();
+
+        // Buscar configurações
+        const config = await DataService.buscarConfig();
+        document.getElementById('nomeLoja').textContent = config.nomeLoja;
+        document.title = `${config.nomeLoja} - Catálogo`;
+        CatalogRender.setConfig(config);
+
+        // Exibir taxa de entrega
+        if (config.taxaMotoboy && config.taxaMotoboy > 0) {
+          const avisoDiv = document.getElementById('avisoEntrega');
+          const valorSpan = document.getElementById('valorTaxa');
+          valorSpan.textContent = `R$ ${config.taxaMotoboy.toFixed(2).replace('.', ',')}`;
+          avisoDiv.style.display = 'block';
+        }
+
+        // Inicializar tracking
+        TrackingService.init(config);
+
+        // Buscar produtos
+        CatalogRender.mostrarLoading();
+        const produtos = await DataService.buscarProdutos();
+
+        // Renderizar
+        CatalogRender.renderizarProdutos(produtos);
+        Filters.init(produtos, config);
+        Filters.atualizarContadores(produtos.length);
+
+      } catch (error) {
+        console.error('❌ Erro ao inicializar catálogo:', error);
+        const grid = document.getElementById('produtosGrid');
+        if (grid) {
+          grid.innerHTML = `
+            <div class="error-state">
+              <p>Erro ao carregar produtos. Tente novamente mais tarde.</p>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Executar ao carregar
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', inicializarCatalogo);
+    } else {
+      inicializarCatalogo();
+    }
+  </script>
 </body>
 </html>
