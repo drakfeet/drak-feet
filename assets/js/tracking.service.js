@@ -52,30 +52,44 @@ const TrackingService = {
   },
 
   /**
-   * Inicializa Google Analytics 4
-   * @param {string} measurementId 
-   */
-  initGA(measurementId) {
-    try {
-      // Criar dataLayer e gtag
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      window.gtag = gtag;
+ * Inicializa Google Analytics 4
+ * @param {string} measurementId 
+ */
+initGA(measurementId) {
+  try {
+    if (this.gaInitialized) return;
 
+    // Criar dataLayer e gtag
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
+    };
+
+    // Criar script GA
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+
+    script.onload = () => {
       gtag('js', new Date());
-      gtag('config', measurementId);
-
-      // Carregar script GA
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-      document.head.appendChild(script);
+      gtag('config', measurementId, {
+        send_page_view: true
+      });
 
       this.gaInitialized = true;
-      console.info('✅ Google Analytics inicializado:', measurementId);
-    } catch (error) {
-      console.warn('⚠️ Erro ao inicializar Google Analytics:', error);
-    }
+      console.info('✅ Google Analytics inicializado corretamente:', measurementId);
+    };
+
+    script.onerror = () => {
+      console.warn('⚠️ Falha ao carregar Google Analytics');
+    };
+
+    document.head.appendChild(script);
+  } catch (error) {
+    console.warn('⚠️ Erro ao inicializar Google Analytics:', error);
+  }
+}
+
   },
 
   /**
@@ -140,3 +154,4 @@ const TrackingService = {
 
 // Exportar
 window.TrackingService = TrackingService;
+
