@@ -1,0 +1,292 @@
+/* ========================================
+   MELHORIAS DE RESPONSIVIDADE MOBILE
+======================================== */
+
+/* Menu Mobile Estilo App */
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    z-index: 100;
+    flex-direction: row;
+    padding: 0;
+  }
+
+  .sidebar-header,
+  .sidebar-footer {
+    display: none;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    width: 100%;
+  }
+
+  .nav-item {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px 8px;
+    flex: 1;
+  }
+
+  .nav-item .icon {
+    font-size: 22px;
+  }
+
+  .nav-item span:not(.icon) {
+    font-size: 11px;
+  }
+
+  .main-content {
+    margin-left: 0;
+    margin-bottom: 70px;
+    min-height: calc(100vh - 70px);
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .container {
+    padding: 16px;
+  }
+
+  /* Dashboard Cards Mobile */
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .dashboard-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
+  }
+
+  .card-value {
+    font-size: 28px;
+  }
+
+  /* Tabelas Mobile */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table {
+    min-width: 100%;
+    font-size: 13px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 10px 8px;
+  }
+
+  .data-table th {
+    font-size: 11px;
+  }
+
+  .status-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .acoes {
+    gap: 4px;
+  }
+
+  .btn-editar,
+  .btn-deletar {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  /* Formulários Mobile */
+  .form-card {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 16px; /* Previne zoom no iOS */
+  }
+
+  .checkbox-group {
+    gap: 12px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  /* Tabs Mobile */
+  .tabs-header {
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tabs-header::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+
+  .tabs-content {
+    padding: 20px;
+  }
+
+  /* Quick Actions Mobile */
+  .actions-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .action-button {
+    padding: 20px;
+  }
+
+  /* Loading Mobile */
+  .loading-overlay {
+    backdrop-filter: blur(10px);
+  }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Alertas Mobile */
+  .alert {
+    font-size: 13px;
+    padding: 12px;
+  }
+}
+
+/* Melhorias para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    margin-left: 200px;
+  }
+
+  .sidebar-nav {
+    padding: 16px 0;
+  }
+
+  .nav-item {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .nav-item .icon {
+    font-size: 18px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .form-card {
+    max-width: 100%;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    margin-bottom: 0;
+  }
+
+  .topbar {
+    padding: 12px 16px;
+  }
+}
+
+/* Melhorias de Performance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark Mode Support (se necessário) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --bg-hover: #334155;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .sidebar,
+  .topbar,
+  .btn,
+  .form-actions {
+    display: none;
+  }
+
+  .main-content {
+    margin: 0;
+    padding: 0;
+  }
+
+  .data-table {
+    font-size: 10pt;
+  }
+}

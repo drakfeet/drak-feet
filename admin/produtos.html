@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos - Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css"/>
+    <link rel="stylesheet" href="assets/css/admin-mobile.css"/>
+
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>📦 Admin</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="index.html" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="produtos.html" class="nav-item active">
+          <span class="icon">📦</span>
+          <span>Produtos</span>
+        </a>
+        <a href="metricas.html" class="nav-item">
+          <span class="icon">📈</span>
+          <span>Métricas</span>
+        </a>
+        <a href="configuracoes.html" class="nav-item">
+          <span class="icon">⚙️</span>
+          <span>Configurações</span>
+        </a>
+        <a href="https://catalogo.drakfeet.com/" class="nav-item" target="_blank">
+          <span class="icon">🌐</span>
+          <span>Ver Catálogo</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="btn-logout">Sair</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <h1>Produtos</h1>
+        <a href="produto-form.html" class="btn btn-primary">
+          ➕ Novo Produto
+        </a>
+      </header>
+
+      <div class="container">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Imagem</th>
+                <th>Nome</th>
+                <th>Marca</th>
+                <th>Preço PIX</th>
+                <th>Preço Cartão</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="produtosTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 40px;">
+                  Carregando produtos...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <script src="assets/js/firebase.js"></script>
+
+<script src="assets/js/auth.core.js"></script>
+<script src="assets/js/auth.guard.js"></script>
+
+<script src="assets/js/config.service.js"></script>
+<script src="assets/js/produtos.service.js"></script>
+<script src="assets/js/produtos.ui.js"></script>
+
+  <script>
+    // Carregar produtos ao iniciar
+    async function carregarProdutos() {
+      const produtos = await ProdutosService.listar();
+      ProdutosUI.renderizarLista(produtos);
+    }
+
+    // Executar ao carregar
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', carregarProdutos);
+    } else {
+      carregarProdutos();
+    }
+  </script>
+</body>
+
+</html>
