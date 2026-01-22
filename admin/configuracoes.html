@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações - Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css"/>
+    <link rel="stylesheet" href="assets/css/admin-mobile.css"/>
+
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>📦 Admin</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="index.html" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="produtos.html" class="nav-item">
+          <span class="icon">📦</span>
+          <span>Produtos</span>
+        </a>
+        <a href="metricas.html" class="nav-item">
+          <span class="icon">📈</span>
+          <span>Métricas</span>
+        </a>
+        <a href="configuracoes.html" class="nav-item active">
+          <span class="icon">⚙️</span>
+          <span>Configurações</span>
+        </a>
+        <a href="https://catalogo.drakfeet.com" class="nav-item" target="_blank">
+          <span class="icon">🌐</span>
+          <span>Ver Catálogo</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="btn-logout">Sair</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <h1>Configurações</h1>
+      </header>
+
+      <div class="container">
+        <!-- Abas de Configuração -->
+        <div class="tabs-container">
+          <div class="tabs-header">
+            <button class="tab-btn active" data-tab="geral">🏪 Geral</button>
+            <button class="tab-btn" data-tab="visual">🎨 Visual</button>
+            <button class="tab-btn" data-tab="produtos">📦 Produtos</button>
+            <button class="tab-btn" data-tab="pagamento">💳 Pagamento</button>
+            <button class="tab-btn" data-tab="comunicacao">💬 Comunicação</button>
+            <button class="tab-btn" data-tab="tracking">📊 Tracking</button>
+          </div>
+
+          <form id="configForm" class="tabs-content">
+            <!-- ABA GERAL -->
+            <div class="tab-pane active" data-pane="geral">
+              <h2>Informações Gerais</h2>
+              
+              <div class="form-group">
+                <label for="nomeLoja">Nome da Loja *</label>
+                <input type="text" id="nomeLoja" name="nomeLoja" required>
+              </div>
+
+              <div class="form-group">
+                <label for="whatsapp">WhatsApp *</label>
+                <input type="text" id="whatsapp" name="whatsapp" required 
+                       placeholder="5511999999999" pattern="[0-9]{10,15}">
+                <small>Formato: código do país + DDD + número (apenas números)</small>
+              </div>
+
+              <div class="form-group">
+                <label for="taxaMotoboy">Taxa de Entrega (R$)</label>
+                <input type="number" id="taxaMotoboy" name="taxaMotoboy" step="0.01" min="0">
+              </div>
+            </div>
+
+            <!-- ABA VISUAL -->
+            <div class="tab-pane" data-pane="visual">
+              <h2>Identidade Visual</h2>
+              
+              <div class="form-group">
+                <label for="logoUpload">Logo da Loja</label>
+                <input type="file" id="logoUpload" accept="image/*">
+                <input type="hidden" id="logoUrl" name="logoUrl">
+                <div id="logoPreview" class="logo-preview"></div>
+                <small>Recomendado: 200x60px (PNG com fundo transparente)</small>
+              </div>
+
+              <div class="form-group">
+                <label for="avisoTexto">Texto do Aviso Principal</label>
+                <textarea id="avisoTexto" name="avisoTexto" rows="3"></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="avisoBotaoTexto">Texto do Botão</label>
+                  <input type="text" id="avisoBotaoTexto" name="avisoBotaoTexto">
+                </div>
+                <div class="form-group">
+                  <label for="avisoBotaoUrl">URL do Botão</label>
+                  <input type="url" id="avisoBotaoUrl" name="avisoBotaoUrl">
+                </div>
+              </div>
+            </div>
+
+            <!-- ABA PRODUTOS -->
+            <div class="tab-pane" data-pane="produtos">
+              <h2>Gestão de Produtos</h2>
+              
+              <div class="form-group">
+                <label for="menuCategorias">Categorias (uma por linha)</label>
+                <textarea id="menuCategorias" name="menuCategorias" rows="5"></textarea>
+                <small>Categorias disponíveis para o menu do catálogo</small>
+              </div>
+
+              <div class="form-group">
+                <label for="marcasCadastradas">Marcas (uma por linha)</label>
+                <textarea id="marcasCadastradas" name="marcasCadastradas" rows="5"></textarea>
+                <small>Marcas disponíveis no cadastro de produtos</small>
+              </div>
+
+              <div class="form-group">
+                <label for="categoriasCadastradas">Categorias de Produtos (uma por linha)</label>
+                <textarea id="categoriasCadastradas" name="categoriasCadastradas" rows="5"></textarea>
+                <small>Categorias disponíveis no cadastro de produtos</small>
+              </div>
+            </div>
+
+            <!-- ABA PAGAMENTO -->
+            <div class="tab-pane" data-pane="pagamento">
+              <h2>Formas de Pagamento</h2>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="descontoPix">Desconto PIX (%)</label>
+                  <input type="number" id="descontoPix" name="descontoPix" min="0" max="100">
+                  <small>Ex: 10 = 10% de desconto</small>
+                </div>
+                <div class="form-group">
+                  <label for="parcelasSemJuros">Parcelas sem Juros</label>
+                  <input type="number" id="parcelasSemJuros" name="parcelasSemJuros" min="1" max="12">
+                </div>
+              </div>
+            </div>
+
+            <!-- ABA COMUNICAÇÃO -->
+            <div class="tab-pane" data-pane="comunicacao">
+              <h2>Comunicação com Cliente</h2>
+              
+              <div class="form-group">
+                <label for="mensagemPadrao">Mensagem do WhatsApp</label>
+                <textarea id="mensagemPadrao" name="mensagemPadrao" rows="6"></textarea>
+                <small>
+                  <strong>Variáveis:</strong> {produto}, {marca}, {tamanho}, {pagamento}, {valor}
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="whatsappFlutuante" name="whatsappFlutuante">
+                  Ativar Botão Flutuante do WhatsApp
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label for="whatsappMensagemFlutuante">Mensagem do Botão Flutuante</label>
+                <input type="text" id="whatsappMensagemFlutuante" name="whatsappMensagemFlutuante" 
+                       placeholder="Precisa de Ajuda?">
+              </div>
+            </div>
+
+            <!-- ABA TRACKING -->
+            <div class="tab-pane" data-pane="tracking">
+              <h2>Analytics e Tracking</h2>
+              
+              <div class="form-group">
+                <label for="pixelFacebook">Facebook Pixel (ID)</label>
+                <input type="text" id="pixelFacebook" name="pixelFacebook">
+              </div>
+
+              <div class="form-group">
+                <label for="gtmGoogle">Google Tag Manager (GTM-ID)</label>
+                <input type="text" id="gtmGoogle" name="gtmGoogle">
+              </div>
+
+              <div class="form-group">
+                <label for="googleAnalytics">Google Analytics (GA-ID)</label>
+                <input type="text" id="googleAnalytics" name="googleAnalytics">
+              </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">💾 Salvar Configurações</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+ <script src="assets/js/firebase.js"></script>
+
+<script src="assets/js/auth.core.js"></script>
+<script src="assets/js/auth.guard.js"></script>
+
+<script src="assets/js/config.service.js"></script>
+<script src="assets/js/produtos.service.js"></script>
+<script src="assets/js/produtos.ui.js"></script>
+<script src="assets/js/config.ui.js"></script>
+
+
+</body>
+</html>
