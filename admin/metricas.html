@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Métricas - Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <link rel="stylesheet" href="assets/css/admin-mobile.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>📦 Admin</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="index.html" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="produtos.html" class="nav-item">
+          <span class="icon">📦</span>
+          <span>Produtos</span>
+        </a>
+        <a href="metricas.html" class="nav-item active">
+          <span class="icon">📈</span>
+          <span>Métricas</span>
+        </a>
+        <a href="configuracoes.html" class="nav-item">
+          <span class="icon">⚙️</span>
+          <span>Configurações</span>
+        </a>
+        <a href="https://catalogo.drakfeet.com" class="nav-item" target="_blank">
+          <span class="icon">🌐</span>
+          <span>Ver Catálogo</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="btn-logout">Sair</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <h1>Métricas e Analytics</h1>
+      </header>
+
+      <div class="container">
+        <!-- Resumo -->
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <div class="card-icon">📦</div>
+            <div class="card-content">
+              <h3>Total de Produtos</h3>
+              <p class="card-value" id="totalProdutos">0</p>
+            </div>
+          </div>
+
+          <div class="dashboard-card">
+            <div class="card-icon">👁️</div>
+            <div class="card-content">
+              <h3>Visualizações</h3>
+              <p class="card-value" id="totalAcessos">0</p>
+              <small class="card-status">Últimos 30 dias</small>
+            </div>
+          </div>
+
+          <div class="dashboard-card">
+            <div class="card-icon">💬</div>
+            <div class="card-content">
+              <h3>Cliques WhatsApp</h3>
+              <p class="card-value" id="totalCliques">0</p>
+              <small class="card-status">Últimos 30 dias</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eventos Recentes -->
+        <div class="section">
+          <h2>Eventos Recentes</h2>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Produto</th>
+                  <th>Data/Hora</th>
+                </tr>
+              </thead>
+              <tbody id="eventosTableBody">
+                <tr>
+                  <td colspan="3" style="text-align: center; padding: 40px;">
+                    Carregando eventos...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Scripts -->
+  <script src="assets/js/firebase.js"></script>
+
+<!-- Auth primeiro -->
+<script src="assets/js/auth.core.js"></script>
+
+<!-- Depois quem depende dele -->
+<script src="assets/js/auth.guard.js"></script>
+
+<!-- Outros -->
+<script src="assets/js/auth.service.js"></script>
+  <script src="assets/js/produtos.service.js"></script>
+  <script src="assets/js/dashboard.service.js"></script>
+
+  <script>
+    async function carregarMetricas() {
+      const dados = await DashboardService.buscarMetricasCompletas();
+      const stats = DashboardService.estatisticasResumo(dados.metricas);
+      
+      document.getElementById('totalProdutos').textContent = dados.totalProdutos;
+      document.getElementById('totalAcessos').textContent = stats.ultimos30Dias.acessos;
+      document.getElementById('totalCliques').textContent = stats.ultimos30Dias.cliques;
+
+      const eventos = dados.metricas.slice(0, 50); // Últimos 50 eventos
+      const tbody = document.getElementById('eventosTableBody');
+
+      if (eventos.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="3" style="text-align: center; padding: 40px;">
+              Nenhum evento registrado
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = eventos.map(evento => {
+        const tipoLabel = evento.tipo === 'whatsapp_click' ? '💬 WhatsApp' : '👁️ Visualização';
+        const dataFormatada = new Date(evento.timestamp).toLocaleString('pt-BR');
+        
+        return `
+          <tr>
+            <td><span class="badge">${tipoLabel}</span></td>
+            <td>${evento.produtoNome || 'Página Principal'}</td>
+            <td>${dataFormatada}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', carregarMetricas);
+    } else {
+      carregarMetricas();
+    }
+  </script>
+</body>
+</html>
