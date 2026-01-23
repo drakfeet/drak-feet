@@ -145,49 +145,37 @@
 <script src="assets/js/produtos.service.js"></script>
 <script src="assets/js/produtos.ui.js"></script>
 
-  <script>
-    // Carregar marcas e categorias no datalist
-    async function carregarDataLists() {
-      try {
-        const config = await ConfigService.buscar();
-        
-        // Marcas
-        if (config.marcasCadastradas && config.marcasCadastradas.length > 0) {
-          const marcasList = document.getElementById('marcas-list');
-          marcasList.innerHTML = config.marcasCadastradas.map(marca => 
-            `<option value="${marca}">`
-          ).join('');
-        }
-        
-        // Categorias
-        if (config.categoriasCadastradas && config.categoriasCadastradas.length > 0) {
-          const categoriasList = document.getElementById('categorias-list');
-          categoriasList.innerHTML = config.categoriasCadastradas.map(cat => 
-            `<option value="${cat}">`
-          ).join('');
-        }
-      } catch (error) {
-        console.warn('Erro ao carregar datalists:', error);
+  <!-- REMOVIDO: handlers duplicados -->
+
+<script>
+  // Carregar marcas e categorias no datalist
+  async function carregarDataLists() {
+    try {
+      const config = await ConfigService.buscar();
+      
+      if (config.marcasCadastradas?.length) {
+        document.getElementById('marcas-list').innerHTML =
+          config.marcasCadastradas.map(m => `<option value="${m}">`).join('');
       }
+
+      if (config.categoriasCadastradas?.length) {
+        document.getElementById('categorias-list').innerHTML =
+          config.categoriasCadastradas.map(c => `<option value="${c}">`).join('');
+      }
+    } catch (e) {
+      console.warn('Erro ao carregar datalists:', e);
     }
-    
-    // Carregar datalists ao iniciar
-    carregarDataLists();
-    
-    // Verificar se é modo edição
-    const urlParams = new URLSearchParams(window.location.search);
-    const produtoId = urlParams.get('id');
+  }
 
-    if (produtoId) {
-      document.getElementById('pageTitle').textContent = 'Editar Produto';
-      ProdutosUI.carregarFormulario(produtoId);
-    }
+  carregarDataLists();
 
-    // Handler do formulário
-    document.getElementById('produtoForm').addEventListener('submit', ProdutosUI.salvarProduto);
+  const urlParams = new URLSearchParams(window.location.search);
+  const produtoId = urlParams.get('id');
 
-    // Handler do upload
-    document.getElementById('imagemUpload').addEventListener('change', ProdutosUI.processarUpload);
-  </script>
+  if (produtoId) {
+    document.getElementById('pageTitle').textContent = 'Editar Produto';
+    ProdutosUI.carregarFormulario(produtoId);
+  }
+</script>
 </body>
 </html>
