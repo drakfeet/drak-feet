@@ -377,7 +377,7 @@ const CatalogRender = {
               🛒 Adicionar ao Carrinho
             </button>
             <button class="btn-whatsapp" onclick="CatalogRender.enviarWhatsApp('${produto.id}')">
-              📱 Comprar Agora
+              📱 Comprar no WhatsApp
             </button>
           </div>
         </div>
